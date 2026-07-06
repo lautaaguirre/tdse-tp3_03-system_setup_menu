@@ -1,0 +1,6 @@
+../app/src/display.c:28:6:displayInit	16	static
+../app/src/display.c:66:6:displayCharPositionWrite	24	static
+../app/src/display.c:84:6:displayDataWrite	16	static
+../app/src/display.c:90:6:displayStringWrite	16	static
+../app/src/display.c:99:13:lcd_send_cmd	32	static
+../app/src/display.c:118:13:lcd_send_data	32	static
