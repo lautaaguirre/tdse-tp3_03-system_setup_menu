@@ -25,8 +25,7 @@ app/src/task_actuator.o: ../app/src/task_actuator.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
- ../app/inc/logger.h ../app/inc/dwt.h ../app/inc/board.h ../app/inc/app.h \
- ../app/inc/task_actuator_attribute.h \
+ ../app/inc/logger.h ../app/inc/task_actuator_attribute.h \
  ../app/inc/task_actuator_interface.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
@@ -56,8 +55,5 @@ app/src/task_actuator.o: ../app/src/task_actuator.c ../Core/Inc/main.h \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:
 ../app/inc/logger.h:
-../app/inc/dwt.h:
-../app/inc/board.h:
-../app/inc/app.h:
 ../app/inc/task_actuator_attribute.h:
 ../app/inc/task_actuator_interface.h:
