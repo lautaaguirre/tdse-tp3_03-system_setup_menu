@@ -6,15 +6,15 @@
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of the copyright holder nor the names of its
- *    contributors may be used to endorse or promote products derived from
- *    this software without specific prior written permission.
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -42,6 +42,7 @@
 
 /* Application & Tasks includes */
 #include "board.h"
+#include "task_sensor.h"
 
 /********************** macros and definitions *******************************/
 
@@ -82,6 +83,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		/* Work to be done. */
 	}
+}
+
+/**
+  * @brief  Conversion complete callback in non blocking mode
+  * @param  hadc: ADC handle
+  * @retval None
+  */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    /* 1. Obtenemos el valor crudo (raw) del registro de datos del ADC */
+    uint32_t raw_value = HAL_ADC_GetValue(hadc);
+
+    /* 2. Disparamos la función puente para inyectarle el dato a nuestra máquina de estados */
+    task_sensor_adc_it_callback(raw_value);
 }
 
 /********************** end of file ******************************************/

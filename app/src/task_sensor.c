@@ -1,225 +1,93 @@
 /*
  * Copyright (c) 2026 Juan Manuel Cruz <jcruz@fi.uba.ar> <jcruz@frba.utn.edu.ar>.
  * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. Neither the name of the copyright holder nor the names of its
- *    contributors may be used to endorse or promote products derived from
- *    this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @author : Juan Manuel Cruz <jcruz@fi.uba.ar> <jcruz@frba.utn.edu.ar>
+ * (Licencia estándar FIUBA...)
  */
 
 /********************** inclusions *******************************************/
-/* Project includes */
 #include "main.h"
-
-/* Demo includes */
 #include "logger.h"
-#include "dwt.h"
-
-/* Application & Tasks includes */
-#include "board.h"
-#include "app.h"
-#include "task_system_attribute.h"
-#include "task_system_interface.h"
-#include "task_sensor_attribute.h"
 
 
-
-//#include "task_sensor_interface.h"
-
-/* Inclusiones de submódulos */
+/* Inclusión de las interfaces de nuestras submáquinas */
 #include "task_sensor_button.h"
 #include "task_sensor_adc.h"
+#include "task_system_attribute.h"
 
 /********************** macros and definitions *******************************/
-#define DEL_BTN_MIN		0ul
-#define DEL_BTN_MED		25ul
-#define DEL_BTN_MAX		50ul
+/* Hardware para botones según CubeMX */
+#define BTN_A_PORT   GPIOA
+#define BTN_A_PIN    GPIO_PIN_0
+#define BTN_ENT_PORT GPIOA
+#define BTN_ENT_PIN  GPIO_PIN_1
+#define BTN_NEX_PORT GPIOA
+#define BTN_NEX_PIN  GPIO_PIN_4
+#define BTN_ESC_PORT GPIOB
+#define BTN_ESC_PIN  GPIO_PIN_0
 
-#define SENSOR_CFG_QTY		(sizeof(task_sensor_cfg_list)/sizeof(task_sensor_cfg_t))
-#define SENSOR_DTA_QTY		SENSOR_CFG_QTY
-
-/********************** internal data declaration ****************************/
-const task_sensor_cfg_t task_sensor_cfg_list[] = {
-	{ID_BTN_A,    BTN_A_PORT,    BTN_A_PIN,   BTN_A_PRESSED,   DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_BTN_A},
-	{ID_BTN_ENT,  BTN_ENT_PORT,  BTN_ENT_PIN, BTN_ENT_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_ENTER},
-	{ID_BTN_NEX,  BTN_NEX_PORT,  BTN_NEX_PIN, BTN_NEX_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_NEXT},
-	{ID_BTN_ESC,  BTN_ESC_PORT,  BTN_ESC_PIN, BTN_ESC_PRESSED, DEL_BTN_MAX,
-	 EV_SYS_IDLE, EV_SYS_ESCAPE}
-};
-
-task_sensor_dta_t task_sensor_dta_list[SENSOR_DTA_QTY];
-
-/********************** internal functions declaration ***********************/
-void task_sensor_statechart(uint32_t index);
+#define BTN_PRESSED  GPIO_PIN_RESET
+#define DEL_BTN_MAX  50ul  /* 50 milisegundos de antirrebote */
 
 /********************** internal data definition *****************************/
-const char *p_task_sensor 		= "Task Sensor (Sensor Statechart)";
-const char *p_task_sensor_ 		= "Non-Blocking Code";
-const char *p_task_sensor__ 	= "(Update by Time Code, period = 1mS)";
+/* 1. CONFIGURACIÓN E INSTANCIACIÓN DE BOTONES */
+#define SENSOR_BTN_QTY 4
+const task_sensor_btn_cfg_t sensor_btn_cfg_list[SENSOR_BTN_QTY] = {
+    {ID_BTN_A,   BTN_A_PORT,   BTN_A_PIN,   BTN_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_BTN_A},
+    {ID_BTN_ENT, BTN_ENT_PORT, BTN_ENT_PIN, BTN_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ENTER},
+    {ID_BTN_NEX, BTN_NEX_PORT, BTN_NEX_PIN, BTN_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_NEXT},
+    {ID_BTN_ESC, BTN_ESC_PORT, BTN_ESC_PIN, BTN_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ESCAPE}
+};
+static task_sensor_btn_dta_t sensor_btn_dta_list[SENSOR_BTN_QTY];
 
-/********************** external data declaration ****************************/
+/* 2. CONFIGURACIÓN E INSTANCIACIÓN DE ADCs */
+extern ADC_HandleTypeDef hadc1; /* Exportado desde main.c generado por CubeMX */
+
+#define SENSOR_ADC_QTY 1
+const task_sensor_adc_cfg_t sensor_adc_cfg_list[SENSOR_ADC_QTY] = {
+    {&hadc1, 2048, 100, EV_SYS_FAULT_STALL} /* Dispara falla si el potenciómetro supera la mitad */
+};
+static task_sensor_adc_dta_t sensor_adc_dta_list[SENSOR_ADC_QTY];
 
 /********************** external functions definition ************************/
 void task_sensor_init(void *parameters)
 {
-	uint32_t index;
-	task_sensor_dta_t *p_task_sensor_dta;
-	task_sensor_st_t state;
-	task_sensor_ev_t event;
+    uint32_t i;
+    LOGGER_INFO("  task_sensor is running - Tick [mS] = %lu", HAL_GetTick());
 
-	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
-	LOGGER_INFO("  %s is running - Tick [mS] = %lu", GET_NAME(task_sensor_init), HAL_GetTick());
-	LOGGER_INFO("   %s is a %s", GET_NAME(task_sensor), p_task_sensor);
-	LOGGER_INFO("   %s is a %s", GET_NAME(task_sensor), p_task_sensor_);
-	LOGGER_INFO("   %s is a %s", GET_NAME(task_sensor), p_task_sensor__);
+    /* Inicializar estado dinámico (DTA) de Botones */
+    for (i = 0; i < SENSOR_BTN_QTY; i++) {
+        sensor_btn_dta_list[i].state = ST_BTN_UP;
+        sensor_btn_dta_list[i].event = EV_BTN_UP;
+        sensor_btn_dta_list[i].tick  = 0;
+    }
 
-	for (index = 0; SENSOR_DTA_QTY > index; index++)
-	{
-		/* Update Task Sensor Data Pointer */
-		p_task_sensor_dta = &task_sensor_dta_list[index];
-
-		/* Init & Print out: Index & Task execution FSM */
-		state = ST_BTN_UP;
-		p_task_sensor_dta->state = state;
-
-		event = EV_BTN_UP;
-		p_task_sensor_dta->event = event;
-
-		LOGGER_INFO(" ");
-		LOGGER_INFO("   %s = %lu   %s = %lu   %s = %lu",
-				    GET_NAME(index), index,
-					GET_NAME(state), (uint32_t)state,
-					GET_NAME(event), (uint32_t)event);
-	}
+    /* Inicializar estado dinámico (DTA) de ADCs */
+    for (i = 0; i < SENSOR_ADC_QTY; i++) {
+        sensor_adc_dta_list[i].state = ST_ADC_IDLE;
+        sensor_adc_dta_list[i].tick  = 0;
+        sensor_adc_dta_list[i].flag_it_ready = false;
+        sensor_adc_dta_list[i].raw_value = 0;
+    }
 }
 
 void task_sensor_update(void *parameters)
 {
-	uint32_t index;
+    uint32_t i;
 
-	for (index = 0; SENSOR_DTA_QTY > index; index++)
-	{
-		/* Run Task Statechart */
-		task_sensor_statechart(index);
-	}
-}
+    /* * ¡AQUÍ ESTÁ LA MAGIA MODULAR!
+     * task_sensor no tiene switches. Solo delega la ejecución de la
+     * máquina de estados a la función correspondiente de cada módulo.
+     */
 
-void task_sensor_statechart(uint32_t index)
-{
-	const task_sensor_cfg_t *p_task_sensor_cfg;
-	task_sensor_dta_t *p_task_sensor_dta;
+    /* Barrido (Polling) de todos los botones para el antirrebote */
+    for (i = 0; i < SENSOR_BTN_QTY; i++) {
+        task_sensor_button_statechart(&sensor_btn_cfg_list[i], &sensor_btn_dta_list[i]);
+    }
 
-	for (index = 0; SENSOR_DTA_QTY > index; index++)
-	{
-		/* Update Task Sensor Configuration & Data Pointer */
-		p_task_sensor_cfg = &task_sensor_cfg_list[index];
-		p_task_sensor_dta = &task_sensor_dta_list[index];
-
-		if (p_task_sensor_cfg->pressed == HAL_GPIO_ReadPin(p_task_sensor_cfg->gpio_port, p_task_sensor_cfg->pin))
-		{
-			p_task_sensor_dta->event =	EV_BTN_DOWN;
-		}
-		else
-		{
-			p_task_sensor_dta->event =	EV_BTN_UP;
-		}
-
-		switch (p_task_sensor_dta->state)
-		{
-			case ST_BTN_UP:
-
-				if (EV_BTN_DOWN == p_task_sensor_dta->event)
-				{
-					p_task_sensor_dta->tick = p_task_sensor_cfg->tick_max;
-					p_task_sensor_dta->state = ST_BTN_FALLING;
-				}
-
-				break;
-
-			case ST_BTN_FALLING:
-
-				p_task_sensor_dta->tick--;
-				if (DEL_BTN_MIN == p_task_sensor_dta->tick)
-				{
-					if (EV_BTN_DOWN == p_task_sensor_dta->event)
-					{
-						put_event_task_system(p_task_sensor_cfg->signal_down);
-						p_task_sensor_dta->state = ST_BTN_DOWN;
-					}
-					else
-					{
-						p_task_sensor_dta->state = ST_BTN_UP;
-					}
-				}
-
-				break;
-
-			case ST_BTN_DOWN:
-
-				if (EV_BTN_UP == p_task_sensor_dta->event)
-				{
-					p_task_sensor_dta->state = ST_BTN_RISING;
-					p_task_sensor_dta->tick = p_task_sensor_cfg->tick_max;
-				}
-
-				break;
-
-			case ST_BTN_RISING:
-
-				p_task_sensor_dta->tick--;
-				if (DEL_BTN_MIN == p_task_sensor_dta->tick)
-				{
-					if (EV_BTN_UP == p_task_sensor_dta->event)
-					{
-						put_event_task_system(p_task_sensor_cfg->signal_up);
-						p_task_sensor_dta->state = ST_BTN_UP;
-					}
-					else
-					{
-						p_task_sensor_dta->state = ST_BTN_DOWN;
-					}
-				}
-
-				break;
-
-			default:
-
-				p_task_sensor_dta->tick  = DEL_BTN_MIN;
-				p_task_sensor_dta->state = ST_BTN_UP;
-				p_task_sensor_dta->event = EV_BTN_UP;
-
-			break;
-		}
-	}
+    /* Actualización asíncrona de los canales ADC */
+    for (i = 0; i < SENSOR_ADC_QTY; i++) {
+        task_sensor_adc_statechart(&sensor_adc_cfg_list[i], &sensor_adc_dta_list[i]);
+    }
 }
 
 /********************** end of file ******************************************/

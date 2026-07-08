@@ -23,7 +23,8 @@ app/src/app_it.o: ../app/src/app_it.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
- ../app/inc/logger.h ../app/inc/dwt.h ../app/inc/board.h
+ ../app/inc/logger.h ../app/inc/dwt.h ../app/inc/board.h \
+ ../app/inc/task_sensor.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 ../Core/Inc/stm32f1xx_hal_conf.h:
@@ -52,3 +53,4 @@ app/src/app_it.o: ../app/src/app_it.c ../Core/Inc/main.h \
 ../app/inc/logger.h:
 ../app/inc/dwt.h:
 ../app/inc/board.h:
+../app/inc/task_sensor.h:

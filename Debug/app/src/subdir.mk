@@ -15,8 +15,13 @@ C_SRCS += \
 ../app/src/task_display.c \
 ../app/src/task_display_interface.c \
 ../app/src/task_sensor.c \
+../app/src/task_sensor_adc.c \
+../app/src/task_sensor_button.c \
 ../app/src/task_system.c \
-../app/src/task_system_interface.c 
+../app/src/task_system_falla.c \
+../app/src/task_system_interface.c \
+../app/src/task_system_normal.c \
+../app/src/task_system_setup.c 
 
 OBJS += \
 ./app/src/app.o \
@@ -29,8 +34,13 @@ OBJS += \
 ./app/src/task_display.o \
 ./app/src/task_display_interface.o \
 ./app/src/task_sensor.o \
+./app/src/task_sensor_adc.o \
+./app/src/task_sensor_button.o \
 ./app/src/task_system.o \
-./app/src/task_system_interface.o 
+./app/src/task_system_falla.o \
+./app/src/task_system_interface.o \
+./app/src/task_system_normal.o \
+./app/src/task_system_setup.o 
 
 C_DEPS += \
 ./app/src/app.d \
@@ -43,8 +53,13 @@ C_DEPS += \
 ./app/src/task_display.d \
 ./app/src/task_display_interface.d \
 ./app/src/task_sensor.d \
+./app/src/task_sensor_adc.d \
+./app/src/task_sensor_button.d \
 ./app/src/task_system.d \
-./app/src/task_system_interface.d 
+./app/src/task_system_falla.d \
+./app/src/task_system_interface.d \
+./app/src/task_system_normal.d \
+./app/src/task_system_setup.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -54,7 +69,7 @@ app/src/%.o app/src/%.su app/src/%.cyclo: ../app/src/%.c app/src/subdir.mk
 clean: clean-app-2f-src
 
 clean-app-2f-src:
-	-$(RM) ./app/src/app.cyclo ./app/src/app.d ./app/src/app.o ./app/src/app.su ./app/src/app_it.cyclo ./app/src/app_it.d ./app/src/app_it.o ./app/src/app_it.su ./app/src/display.cyclo ./app/src/display.d ./app/src/display.o ./app/src/display.su ./app/src/logger.cyclo ./app/src/logger.d ./app/src/logger.o ./app/src/logger.su ./app/src/systick.cyclo ./app/src/systick.d ./app/src/systick.o ./app/src/systick.su ./app/src/task_actuator.cyclo ./app/src/task_actuator.d ./app/src/task_actuator.o ./app/src/task_actuator.su ./app/src/task_actuator_interface.cyclo ./app/src/task_actuator_interface.d ./app/src/task_actuator_interface.o ./app/src/task_actuator_interface.su ./app/src/task_display.cyclo ./app/src/task_display.d ./app/src/task_display.o ./app/src/task_display.su ./app/src/task_display_interface.cyclo ./app/src/task_display_interface.d ./app/src/task_display_interface.o ./app/src/task_display_interface.su ./app/src/task_sensor.cyclo ./app/src/task_sensor.d ./app/src/task_sensor.o ./app/src/task_sensor.su ./app/src/task_system.cyclo ./app/src/task_system.d ./app/src/task_system.o ./app/src/task_system.su ./app/src/task_system_interface.cyclo ./app/src/task_system_interface.d ./app/src/task_system_interface.o ./app/src/task_system_interface.su
+	-$(RM) ./app/src/app.cyclo ./app/src/app.d ./app/src/app.o ./app/src/app.su ./app/src/app_it.cyclo ./app/src/app_it.d ./app/src/app_it.o ./app/src/app_it.su ./app/src/display.cyclo ./app/src/display.d ./app/src/display.o ./app/src/display.su ./app/src/logger.cyclo ./app/src/logger.d ./app/src/logger.o ./app/src/logger.su ./app/src/systick.cyclo ./app/src/systick.d ./app/src/systick.o ./app/src/systick.su ./app/src/task_actuator.cyclo ./app/src/task_actuator.d ./app/src/task_actuator.o ./app/src/task_actuator.su ./app/src/task_actuator_interface.cyclo ./app/src/task_actuator_interface.d ./app/src/task_actuator_interface.o ./app/src/task_actuator_interface.su ./app/src/task_display.cyclo ./app/src/task_display.d ./app/src/task_display.o ./app/src/task_display.su ./app/src/task_display_interface.cyclo ./app/src/task_display_interface.d ./app/src/task_display_interface.o ./app/src/task_display_interface.su ./app/src/task_sensor.cyclo ./app/src/task_sensor.d ./app/src/task_sensor.o ./app/src/task_sensor.su ./app/src/task_sensor_adc.cyclo ./app/src/task_sensor_adc.d ./app/src/task_sensor_adc.o ./app/src/task_sensor_adc.su ./app/src/task_sensor_button.cyclo ./app/src/task_sensor_button.d ./app/src/task_sensor_button.o ./app/src/task_sensor_button.su ./app/src/task_system.cyclo ./app/src/task_system.d ./app/src/task_system.o ./app/src/task_system.su ./app/src/task_system_falla.cyclo ./app/src/task_system_falla.d ./app/src/task_system_falla.o ./app/src/task_system_falla.su ./app/src/task_system_interface.cyclo ./app/src/task_system_interface.d ./app/src/task_system_interface.o ./app/src/task_system_interface.su ./app/src/task_system_normal.cyclo ./app/src/task_system_normal.d ./app/src/task_system_normal.o ./app/src/task_system_normal.su ./app/src/task_system_setup.cyclo ./app/src/task_system_setup.d ./app/src/task_system_setup.o ./app/src/task_system_setup.su
 
 .PHONY: clean-app-2f-src
 

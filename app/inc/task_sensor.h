@@ -51,6 +51,8 @@ extern "C" {
 /********************** external functions declaration ***********************/
 extern void task_sensor_init(void *parameters);
 extern void task_sensor_update(void *parameters);
+/* Función puente: Llamada desde la interrupción de hardware en app_it.c */
+extern void task_sensor_adc_it_callback(uint32_t adc_raw_value);
 
 /********************** End of CPP guard *************************************/
 #ifdef __cplusplus
