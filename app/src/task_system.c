@@ -6,11 +6,11 @@
 #include "task_system_interface.h"
 #include "task_system_normal.h"
 #include "task_system_setup.h"
+#include "task_system_falla.h"   // <--- Incluimos la nueva cabecera
 #include "task_display_interface.h"
 
 #define SYSTEM_DTA_QTY MODE_QTY
 
-/* Variables Privadas del Router */
 static task_system_dta_t task_system_dta_list[SYSTEM_DTA_QTY];
 static task_system_mode_t g_task_system_mode;
 
@@ -22,7 +22,6 @@ void task_system_init(void *parameters)
 
     init_event_task_system();
 
-    /* Inicializar estructuras de memoria para todos los modos */
     for (index = 0; index < SYSTEM_DTA_QTY; index++)
     {
         task_system_dta_list[index].state = ST_SYS_IDLE;
@@ -39,7 +38,6 @@ void task_system_init(void *parameters)
 
 void task_system_update(void *parameters)
 {
-    /* Router: Delega la ejecución a la submáquina correspondiente */
     switch (g_task_system_mode)
     {
         case NORMAL:
@@ -48,6 +46,10 @@ void task_system_update(void *parameters)
 
         case SETUP:
             task_system_setup_statechart(&task_system_dta_list[SETUP]);
+            break;
+
+        case FALLA:
+            task_system_falla_statechart(&task_system_dta_list[FALLA]);
             break;
 
         default:

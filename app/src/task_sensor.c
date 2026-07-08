@@ -47,6 +47,14 @@
 #include "task_system_interface.h"
 #include "task_sensor_attribute.h"
 
+
+
+//#include "task_sensor_interface.h"
+
+/* Inclusiones de submódulos */
+#include "task_sensor_button.h"
+#include "task_sensor_adc.h"
+
 /********************** macros and definitions *******************************/
 #define DEL_BTN_MIN		0ul
 #define DEL_BTN_MED		25ul
