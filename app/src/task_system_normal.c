@@ -32,8 +32,10 @@ void task_system_normal_statechart(task_system_dta_t *p_task_system_dta)
                     put_event_task_display(0, 1, "                ");
                     put_event_task_actuator(EV_ACT_MOTORS_FORWARD, 0);
                 }
-                else if (EV_SYS_ESCAPE == p_task_system_dta->event)
+                /* SALTO MANUAL HACIA EL SETUP MEDIANTE EL BOTÓN 4 */
+                else if (EV_SYS_SETUP_BTN == p_task_system_dta->event)
                 {
+                    p_task_system_dta->state = ST_SYS_IDLE; // Reset p/ la prox vez
                     task_system_set_mode(SETUP);
                 }
             }
@@ -42,13 +44,11 @@ void task_system_normal_statechart(task_system_dta_t *p_task_system_dta)
         case ST_SYS_NORMAL_CLEANING:
             if (true == p_task_system_dta->flag)
             {
-                // CONDICIÓN DE ABORTO CRÍTICO (Prioridad 1)
                 if (EV_SYS_FAULT_STALL == p_task_system_dta->event)
                 {
-                    p_task_system_dta->state = ST_SYS_IDLE; // Reseteamos nuestra máquina interna
-                    task_system_set_mode(FALLA);            // Expulsamos el control al enrutador
+                    p_task_system_dta->state = ST_SYS_IDLE;
+                    task_system_set_mode(FALLA);
                 }
-                // CONDICIÓN REACTIVA NORMAL (Prioridad 2)
                 else if (EV_SYS_SENSOR_OBSTACLE == p_task_system_dta->event)
                 {
                     p_task_system_dta->state = ST_SYS_NORMAL_AVOIDING;
@@ -71,7 +71,6 @@ void task_system_normal_statechart(task_system_dta_t *p_task_system_dta)
 
         case ST_SYS_NORMAL_AVOIDING:
             if (true == p_task_system_dta->flag) {
-                // Aún evadiendo, si hay sobreconsumo en la marcha atrás o giro, ABORTAMOS.
                 if (EV_SYS_FAULT_STALL == p_task_system_dta->event) {
                     p_task_system_dta->state = ST_SYS_IDLE;
                     task_system_set_mode(FALLA);
@@ -88,13 +87,11 @@ void task_system_normal_statechart(task_system_dta_t *p_task_system_dta)
                         p_task_system_dta->tick = 500;
                         put_event_task_actuator(EV_ACT_MOTORS_REVERSE, 0);
                         break;
-
                     case PHASE_REVERSE:
                         fase_evasion = PHASE_SPIN;
                         p_task_system_dta->tick = 800;
                         put_event_task_actuator(EV_ACT_MOTORS_SPIN, 0);
                         break;
-
                     case PHASE_SPIN:
                         p_task_system_dta->state = ST_SYS_NORMAL_CLEANING;
                         put_event_task_display(0, 0, "LIMPIANDO...    ");
@@ -105,10 +102,7 @@ void task_system_normal_statechart(task_system_dta_t *p_task_system_dta)
             }
             break;
 
-        default:
-            p_task_system_dta->state = ST_SYS_IDLE;
-            break;
+        default: p_task_system_dta->state = ST_SYS_IDLE; break;
     }
-
     p_task_system_dta->flag = false;
 }

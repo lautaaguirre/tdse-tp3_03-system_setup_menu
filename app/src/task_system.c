@@ -30,10 +30,19 @@ void task_system_init(void *parameters)
         task_system_dta_list[index].tick  = 0;
     }
 
-    put_event_task_display(0, 0, "MODO NORMAL     ");
-    put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
-
-    task_system_set_mode(NORMAL);
+    /* LECTURA DEL DIP SWITCH (HARDWARE BOOTSTRAPPING)
+         * Asumimos que pusiste el User Label "DIP_SW" en CubeMX.
+         * Si está en 1 (SET), arranca directo en modo SETUP. Si no, a NORMAL. */
+    if (HAL_GPIO_ReadPin(DIP_SW_GPIO_Port, DIP_SW_Pin) == GPIO_PIN_SET)
+    {
+    	task_system_set_mode(SETUP);
+    }
+    else
+    {
+    	put_event_task_display(0, 0, "MODO NORMAL     ");
+    	put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
+    	task_system_set_mode(NORMAL);
+    }
 }
 
 void task_system_update(void *parameters)

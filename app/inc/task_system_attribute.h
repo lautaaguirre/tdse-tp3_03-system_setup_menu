@@ -28,6 +28,7 @@ typedef enum task_system_ev {
     EV_SYS_NEXT,
     EV_SYS_ESCAPE,
     EV_SYS_BTN_A,
+	EV_SYS_SETUP_BTN,
     EV_SYS_SENSOR_OBSTACLE,
     EV_SYS_FAULT_STALL        /* <--- NUEVO: Sobre-consumo en Motores (ADC Potenciómetro) */
 } task_system_ev_t;

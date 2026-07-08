@@ -1,4 +1,4 @@
-#include <stdio.h> // Para snprintf
+#include <stdio.h>
 #include "task_system_setup.h"
 #include "task_system_interface.h"
 #include "task_display_interface.h"
@@ -22,6 +22,7 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
     {
         case ST_SYS_IDLE:
             p_task_system_dta->state = ST_SYS_MAIN;
+            /* La primera vez que entra, siempre dibuja esto */
             put_event_task_display(0, 0, "ASPIRADORA SETUP");
             put_event_task_display(0, 1, "ENTER TO NAVIG. ");
             break;
@@ -40,6 +41,9 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
                 {
                     put_event_task_display(0, 0, "MODO NORMAL     ");
                     put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
+
+                    /* RESET ON EXIT: Aseguramos que arranque bien la próxima */
+                    p_task_system_dta->state = ST_SYS_IDLE;
                     task_system_set_mode(NORMAL);
                 }
             }
@@ -51,7 +55,6 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
                 if (EV_SYS_NEXT == p_task_system_dta->event)
                 {
                     menu_param = (menu_param + 1) % 3;
-
                     if (0 == menu_param) put_event_task_display(0, 1, "> MODO          ");
                     else if (1 == menu_param) put_event_task_display(0, 1, "> POTENCIA      ");
                     else put_event_task_display(0, 1, "> TIEMPO        ");
@@ -59,8 +62,8 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
                 else if (EV_SYS_ENTER == p_task_system_dta->event)
                 {
                     p_task_system_dta->state = ST_SYS_MENU_2;
-
                     put_event_task_display(0, 0, "MENU 2: EDITAR  ");
+
                     if (0 == menu_param) snprintf(lcd_buffer, sizeof(lcd_buffer), "VAL: %s", (val_modo == 0) ? "MANUAL" : "AUTO");
                     else if (1 == menu_param) snprintf(lcd_buffer, sizeof(lcd_buffer), "VAL: %s", (val_potencia == 0) ? "BAJA" : (val_potencia == 1) ? "MEDIA" : "ALTA");
                     else snprintf(lcd_buffer, sizeof(lcd_buffer), "VAL: %d MIN", val_tiempo);
@@ -114,11 +117,7 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
             }
             break;
 
-        default:
-            p_task_system_dta->state = ST_SYS_IDLE;
-            break;
+        default: p_task_system_dta->state = ST_SYS_IDLE; break;
     }
-
-    // Regla Arquitectónica: Limpieza Incondicional
     p_task_system_dta->flag = false;
 }

@@ -1,0 +1,4 @@
+../app/src/app_it.c:59:6:app_it_init	4	static,ignoring_inline_asm
+../app/src/app_it.c:68:6:HAL_SYSTICK_Callback	4	static
+../app/src/app_it.c:79:6:HAL_GPIO_EXTI_Callback	16	static
+../app/src/app_it.c:93:6:HAL_ADC_ConvCpltCallback	24	static
