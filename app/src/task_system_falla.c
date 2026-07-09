@@ -19,7 +19,7 @@ void task_system_falla_statechart(task_system_dta_t *p_task_system_dta)
             p_task_system_dta->state = ST_SYS_FALLA_MAIN;
 
             /* Frenado incondicional de los motores por seguridad física */
-            put_event_task_actuator(EV_ACT_MOTORS_STOP, 0);
+            put_event_task_actuator(EV_ACT_MOTORS_STOP);
 
             /* Alarma Visual al usuario */
             put_event_task_display(0, 0, "ERR: SOBRECARGA ");

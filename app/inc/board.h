@@ -6,15 +6,15 @@
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  *
  * 3. Neither the name of the copyright holder nor the names of its
- *    contributors may be used to endorse or promote products derived from
- *    this software without specific prior written permission.
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -74,6 +74,7 @@ extern "C" {
 #define BTN_PRESSED		BTN_A_PRESSED
 #define BTN_HOVER		BTN_A_HOVER
 
+/* Mapeo abstraído utilizando las definiciones generadas en main.h (D10 a D13) */
 #define BTN_ENT_PIN		D10_Pin
 #define BTN_ENT_PORT	D10_GPIO_Port
 #define BTN_ENT_PRESSED	GPIO_PIN_RESET
@@ -88,6 +89,11 @@ extern "C" {
 #define BTN_ESC_PORT	D12_GPIO_Port
 #define BTN_ESC_PRESSED	GPIO_PIN_RESET
 #define BTN_ESC_HOVER	GPIO_PIN_SET
+
+#define BTN_SET_PIN	    D13_Pin
+#define BTN_SET_PORT	D13_GPIO_Port
+#define BTN_SET_PRESSED GPIO_PIN_RESET
+#define BTN_SET_HOVER	GPIO_PIN_SET
 
 #define LED_A_PIN		LD2_Pin
 #define LED_A_PORT		LD2_GPIO_Port

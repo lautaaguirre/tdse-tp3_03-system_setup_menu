@@ -8,14 +8,16 @@
 #define DEL_BTN_MAX  50ul  /* 50 ms de antirrebote */
 
 /* 1. MAPEO FÍSICO DE BOTONES
- * Asumimos que en CubeMX pusiste los User Labels: BTN_ENT, BTN_NEX, BTN_ESC, BTN_SET
+ * Se corrige la nomenclatura del array para utilizar estrictamente las abstracciones
+ * (_PIN, _PORT y _PRESSED) definidas en el board.h, evitando errores de compilación
+ * por mezcla de labels crudos de CubeMX con las macros del board.
  */
 #define SENSOR_BTN_QTY 4
 const task_sensor_btn_cfg_t sensor_btn_cfg_list[SENSOR_BTN_QTY] = {
-    {ID_BTN_ENT, BTN_ENT_GPIO_Port, BTN_ENT_Pin, GPIO_PIN_RESET, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ENTER},
-    {ID_BTN_NEX, BTN_NEX_GPIO_Port, BTN_NEX_Pin, GPIO_PIN_RESET, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_NEXT},
-    {ID_BTN_ESC, BTN_ESC_GPIO_Port, BTN_ESC_Pin, GPIO_PIN_RESET, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ESCAPE},
-    {ID_BTN_SET, BTN_SET_GPIO_Port, BTN_SET_Pin, GPIO_PIN_RESET, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_SETUP_BTN}
+    {ID_BTN_ENT, BTN_ENT_PORT, BTN_ENT_PIN, BTN_ENT_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ENTER},
+    {ID_BTN_NEX, BTN_NEX_PORT, BTN_NEX_PIN, BTN_NEX_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_NEXT},
+    {ID_BTN_ESC, BTN_ESC_PORT, BTN_ESC_PIN, BTN_ESC_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_ESCAPE},
+    {ID_BTN_SET, BTN_SET_PORT, BTN_SET_PIN, BTN_SET_PRESSED, DEL_BTN_MAX, EV_SYS_IDLE, EV_SYS_SETUP_BTN}
 };
 static task_sensor_btn_dta_t sensor_btn_dta_list[SENSOR_BTN_QTY];
 
