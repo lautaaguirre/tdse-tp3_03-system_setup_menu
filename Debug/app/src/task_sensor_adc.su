@@ -1,0 +1,2 @@
+../app/src/task_sensor_adc.c:9:6:task_sensor_adc_it_callback	16	static
+../app/src/task_sensor_adc.c:15:6:task_sensor_adc_statechart	16	static

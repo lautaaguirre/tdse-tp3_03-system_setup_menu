@@ -37,7 +37,8 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
                     put_event_task_display(0, 1, "> MODO          ");
                     menu_param = 0;
                 }
-                else if (EV_SYS_ESCAPE == p_task_system_dta->event)
+                /* MODIFICACIÓN: Agregamos el botón SET como opción de salida junto al ESCAPE */
+                else if (EV_SYS_ESCAPE == p_task_system_dta->event || EV_SYS_SETUP_BTN == p_task_system_dta->event)
                 {
                     put_event_task_display(0, 0, "MODO NORMAL     ");
                     put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
@@ -52,7 +53,15 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
         case ST_SYS_MENU_1:
             if (true == p_task_system_dta->flag)
             {
-                if (EV_SYS_NEXT == p_task_system_dta->event)
+                /* MODIFICACIÓN: Aborto desde el Menú 1 con SET */
+                if (EV_SYS_SETUP_BTN == p_task_system_dta->event)
+                {
+                    put_event_task_display(0, 0, "MODO NORMAL     ");
+                    put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
+                    p_task_system_dta->state = ST_SYS_IDLE;
+                    task_system_set_mode(NORMAL);
+                }
+                else if (EV_SYS_NEXT == p_task_system_dta->event)
                 {
                     menu_param = (menu_param + 1) % 3;
                     if (0 == menu_param) put_event_task_display(0, 1, "> MODO          ");
@@ -82,7 +91,15 @@ void task_system_setup_statechart(task_system_dta_t *p_task_system_dta)
         case ST_SYS_MENU_2:
             if (true == p_task_system_dta->flag)
             {
-                if (EV_SYS_NEXT == p_task_system_dta->event)
+                /* MODIFICACIÓN: Aborto desde el Menú 2 con SET */
+                if (EV_SYS_SETUP_BTN == p_task_system_dta->event)
+                {
+                    put_event_task_display(0, 0, "MODO NORMAL     ");
+                    put_event_task_display(0, 1, "ENTER: EMPEZAR  ");
+                    p_task_system_dta->state = ST_SYS_IDLE;
+                    task_system_set_mode(NORMAL);
+                }
+                else if (EV_SYS_NEXT == p_task_system_dta->event)
                 {
                     if (0 == menu_param){
                         val_modo = !val_modo;

@@ -1,5 +1,6 @@
 #include "main.h"
 #include "logger.h"
+#include "board.h"
 
 #include "task_sensor_button.h"
 #include "task_sensor_adc.h"

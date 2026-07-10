@@ -58,6 +58,9 @@ typedef struct {
     bool                flag;
 } task_actuator_dta_t;
 
+/* Agregamos el extern para que la interfaz pueda usar esta variable */
+extern task_actuator_dta_t task_actuator_dta_list[];
+
 #ifdef __cplusplus
 }
 #endif

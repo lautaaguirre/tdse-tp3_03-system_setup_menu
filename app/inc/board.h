@@ -75,23 +75,23 @@ extern "C" {
 #define BTN_HOVER		BTN_A_HOVER
 
 /* Mapeo abstraído utilizando las definiciones generadas en main.h (D10 a D13) */
-#define BTN_ENT_PIN		D10_Pin
-#define BTN_ENT_PORT	D10_GPIO_Port
+#define BTN_ENT_PIN		D8_Pin
+#define BTN_ENT_PORT	D8_GPIO_Port
 #define BTN_ENT_PRESSED	GPIO_PIN_RESET
 #define BTN_ENT_HOVER	GPIO_PIN_SET
 
-#define BTN_NEX_PIN		D11_Pin
-#define BTN_NEX_PORT	D11_GPIO_Port
+#define BTN_NEX_PIN		D7_Pin
+#define BTN_NEX_PORT	D7_GPIO_Port
 #define BTN_NEX_PRESSED	GPIO_PIN_RESET
 #define BTN_NEX_HOVER	GPIO_PIN_SET
 
-#define BTN_ESC_PIN		D12_Pin
-#define BTN_ESC_PORT	D12_GPIO_Port
+#define BTN_ESC_PIN		D3_Pin
+#define BTN_ESC_PORT	D3_GPIO_Port
 #define BTN_ESC_PRESSED	GPIO_PIN_RESET
 #define BTN_ESC_HOVER	GPIO_PIN_SET
 
-#define BTN_SET_PIN	    D13_Pin
-#define BTN_SET_PORT	D13_GPIO_Port
+#define BTN_SET_PIN	    D2_Pin
+#define BTN_SET_PORT	D2_GPIO_Port
 #define BTN_SET_PRESSED GPIO_PIN_RESET
 #define BTN_SET_HOVER	GPIO_PIN_SET
 

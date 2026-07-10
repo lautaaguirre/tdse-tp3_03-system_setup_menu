@@ -54,15 +54,15 @@ void task_actuator_init(void *parameters)
     }
 }
 
-void put_event_task_actuator(task_actuator_ev_t event)
-{
-    uint32_t index;
-    for (index = 0; ACTUATOR_DTA_QTY > index; index++)
-    {
-        task_actuator_dta_list[index].event = event;
-        task_actuator_dta_list[index].flag  = true;
-    }
-}
+//void put_event_task_actuator(task_actuator_ev_t event)
+//{
+//    uint32_t index;
+//    for (index = 0; ACTUATOR_DTA_QTY > index; index++)
+//    {
+//        task_actuator_dta_list[index].event = event;
+//        task_actuator_dta_list[index].flag  = true;
+//    }
+//}
 
 void task_actuator_update(void *parameters)
 {
